@@ -1,6 +1,6 @@
 Hex_ai_agent/
 ├── main.py                  # Entry point
-├── board.py                 # Game rules & logic
+├── board.py                 # Game rules & logic +Union Find 
 ├── agent.py                 # Monte Carlo agent logic
 ├── simulation.py            # Style-biased playouts
 ├── styles.py                # Heuristic definitions for play styles
