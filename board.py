@@ -1,54 +1,78 @@
-from union_find import union
+from union_find import union , find
+
+"""
+player 1 is represented by 1, player 2 by 2, and empty cells by 0.
+1 is the read player:play  from top to down,
+2 is the blue player:play from lift to right.
+"""
+
 
 class Cell:
     def __init__(self, row, col):
+        """Initialize a cell with its row, column, state, neighbors, and Union-Find pointers."""
         self.row = row
         self.col = col
         self.state = 0  # 0 = empty, 1 = player 1, 2 = player 2
-        self.neighbors = []
-        self.parent = self  # Union-Find: parent pointer
-        self.rank = 0       # Union-Find: rank
+        self.neighbors = []  # List of neighboring cells
+        self.parent = self  # Union-Find: parent pointer (initially points to itself)
+        self.rank = 0       # Union-Find: rank for union by rank optimization
+
+        self.touch_top = False
+        self.touch_bottom = False
+        self.touch_left = False
+        self.touch_right = False
+
 
     def get_location(self):
-        """Returns location of cell as (row, col)"""
+        """Returns the location of the cell as a tuple (row, col)."""
         return self.row, self.col
 
     def get_cell_state(self):
-        """Returns state of cell: 0 = empty, 1 = player 1, 2 = player 2"""
+        """Returns the state of the cell: 0 = empty, 1 = player 1, 2 = player 2."""
         return self.state
 
     def set_cell_state(self, new_state):
-        """Sets the state of the cell and performs union with neighbors of the same state"""
-        if new_state in [0, 1, 2]:
+        """
+        Sets the state of the cell and performs union with neighbors of the same state.
+        If the new state matches the state of a neighbor, the cells are united.
+        """
+        if new_state in [1, 2]:  # Ensure the state is valid (1 or 2)
             self.state = new_state
             # Iterate over neighbors and perform union if states match
             for neighbor in self.neighbors:
                 if neighbor.get_cell_state() == new_state:
-                    union(self, neighbor)
+                    union(self, neighbor)  # Union the current cell with the neighbor
         else:
             raise ValueError("Invalid state. Use 0 (empty), 1 (player 1), or 2 (player 2).")
-        
 
     def add_neighbor(self, neighbor_cell):
-        """Adds a neighbor relationship to both cells (undirected connection)"""
+        """
+        Adds a neighbor relationship to both cells (undirected connection).
+        Ensures that the neighbor is added to both cells' neighbor lists.
+        """
         if neighbor_cell not in self.neighbors:
             self.neighbors.append(neighbor_cell)
         if self not in neighbor_cell.neighbors:
             neighbor_cell.neighbors.append(self)
 
     def get_neighbors(self):
-        """Returns list of neighbor cells"""
+        """Returns a list of neighboring cells."""
         return self.neighbors
 
 
 class HexBoard:
     def __init__(self, size):
-        self.size = size
+        """Initialize a HexBoard with the given size and create the board."""
+        self.size = size  # Size of the board (size x size)
         self.board = [[Cell(row, col) for col in range(self.size)] for row in range(self.size)]
-        self.make_board()
+        self.make_board()  # Connect neighbors in the hex grid
+        self.wineer = 0
 
     def make_board(self):
-        """Fills board with Cell objects and connects neighbors in a hex grid"""
+        """
+        Fills the board with Cell objects and connects neighbors in a hex grid.
+        Each cell is connected to its valid neighbors based on hex grid rules.
+        """
         for row in range(self.size):
             for col in range(self.size):
                 current = self.board[row][col]
@@ -61,25 +85,55 @@ class HexBoard:
                     (row + 1, col - 1), # Down-left
                     (row + 1, col)      # Down
                 ]
+                # Add valid neighbors to the current cell
                 for r, c in neighbor_coords:
-                    if 0 <= r < self.size and 0 <= c < self.size:
+                    if 0 <= r < self.size and 0 <= c < self.size:  # Check bounds
                         neighbor = self.board[r][c]
                         current.add_neighbor(neighbor)
 
     def is_valid_move(self, row, col):
+        """
+        Checks if a move is valid.
+        A move is valid if the cell is within bounds and is currently empty.
+        """
         return 0 <= row < self.size and 0 <= col < self.size and self.board[row][col].get_cell_state() == 0
 
     def make_move(self, row, col, player):
+        """
+        Makes a move for the given player at the specified row and column.
+        Returns True if the move is successful, False otherwise.
+        """
         if self.is_valid_move(row, col):
-            self.board[row][col].set_cell_state(player)
+            self.board[row][col].set_cell_state(player)  # Set the cell state to the player's state
+            # Check if the player has won after making the move
+            if self.check_win(player, row, col):
+                self.winner = player
             return True
         return False
 
-    def check_win(self, player):
-        # Placeholder for DFS or Union-Find implementation
-        pass
+    def check_win(self, player, row, col):
+        """
+        Checks if the given player has won the game.
+        if the parint of the cell is the is another edge of the board
+        """
+        root = find(self.board[row][col])
+        # Check if the root component connects the player's respective sides
+        if player == 1 and root.touch_top and root.touch_bottom:
+            return True
+        elif player == 2 and root.touch_left and root.touch_right:
+            return True
+
+        return False
+
+            
+
+        
 
     def display(self):
+        """
+        Displays the board in a hexagonal structure.
+        Empty cells are represented by '.', Player 1's cells by 'X', and Player 2's cells by 'O'.
+        """
         for row in range(self.size):
             print(" " * row, end="")  # Offset for hex structure
             for col in range(self.size):

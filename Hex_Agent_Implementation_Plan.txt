@@ -7,8 +7,8 @@ Hex Agent Project: Implementation Phases and Layout
 1. Hex Game Engine:
    - Board representation (2D list, bitboard, or graph-based) DONE
    - Rules enforcement (valid moves, alternating turns) DONE
-   - Win condition detection (path search from side to side)
-   - Board visualization (text-based or graphical)
+   - Win condition detection (path search from side to side) DONE
+   - Board visualization (text-based or graphical) DONE
 
 
 ⚙️ Phase 2: Agent Framework
