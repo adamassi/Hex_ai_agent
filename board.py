@@ -15,7 +15,7 @@ class Cell:
         self.state = 0  # 0 = empty, 1 = player 1, 2 = player 2
         self.neighbors = []  # List of neighboring cells
         self.parent = self  # Union-Find: parent pointer (initially points to itself)
-        self.rank = 0       # Union-Find: rank for union by rank optimization
+        self.rank = 1       # Union-Find: rank for union by rank optimization
 
         self.touch_top = False
         self.touch_bottom = False
@@ -76,6 +76,14 @@ class HexBoard:
         for row in range(self.size):
             for col in range(self.size):
                 current = self.board[row][col]
+                if row == 0:
+                    current.touch_top = True
+                if row == self.size - 1:
+                    current.touch_bottom = True
+                if col == 0:
+                    current.touch_left = True
+                if col == self.size - 1:
+                    current.touch_right = True
                 # 6 possible neighbor directions in a hex grid
                 neighbor_coords = [
                     (row - 1, col),     # Up
