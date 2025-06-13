@@ -1,0 +1,85 @@
+
+Hex Agent Project: Implementation Phases and Layout
+===================================================
+
+🧱 Phase 1: Core Infrastructure
+-------------------------------
+1. Hex Game Engine:
+   - Board representation (2D list, bitboard, or graph-based) DONE
+   - Rules enforcement (valid moves, alternating turns) DONE
+   - Win condition detection (path search from side to side) DONE  
+     path search be Union Find
+   - Board visualization (text-based or graphical) DONE
+
+
+⚙️ Phase 2: Agent Framework
+----------------------------
+2. Agent Architecture:
+   - Entry point: choose_move(board, player, style)
+   - Depth-1 Monte Carlo logic:
+     - For each legal move:
+       - Simulate N playouts from that move
+       - Track win rate
+     - Return the move with the highest win rate
+
+
+🧠 Phase 3: Simulation & Play Style Bias
+----------------------------------------
+3. Simulation Engine:
+   - simulate_random_game(board, current_player, style)
+   - Alternate players until game ends
+   - Choose next move based on style
+
+4. Biasing Strategies (Play Styles):
+   - Aggressive: Extend longest path, prefer closer to goal
+   - Defensive: Block opponent, protect key paths
+   - Explorer: More randomness and diversity
+   - (Optional) Classifier-guided style
+
+
+👤 Phase 4: User Interface
+---------------------------
+5. Human vs. Agent Interface:
+   - CLI version (ASCII board and input prompts)
+   - GUI (optional): tkinter or pygame
+
+
+🔬 Phase 5: Evaluation Tools
+-----------------------------
+6. Experiment Scripts:
+   - Run simulations between agents
+   - Vary simulation parameters (N)
+   - Log win rates, style metrics
+
+7. Logging & Analysis:
+   - Save decisions and statistics
+   - Generate plots or heatmaps (optional)
+
+
+🧰 Phase 6: Utilities & Testing
+-------------------------------
+8. Utility Functions:
+   - Deep copy board, coordinate conversions
+   - Path-finding (DFS or Union-Find)
+
+9. Testing:
+   - Unit tests for board logic and simulations
+   - Playtesting for performance and consistency
+
+
+🗂️ Suggested Folder Structure
+-----------------------------
+hex_project/
+├── main.py                     # Entry point
+├── board.py                   # Game engine
+├── agent.py                   # Core agent logic
+├── simulation.py              # Simulation logic with bias
+├── styles.py                  # Style bias functions
+├── ui_cli.py                  # CLI interface
+├── experiments.py             # Batch experiments
+├── utils.py                   # Helpers and conversions
+├── tests/
+│   └── test_board.py          # Unit tests
+├── data/
+│   └── logs/                  # Simulation logs
+├── README.md
