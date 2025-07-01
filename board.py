@@ -136,7 +136,7 @@ class HexBoard:
 
     def copy_board(self):
         """
-        Returns a deep copy of the current HexBoard.
+        Returns a deep copy of the current HexBoard.,,
         """
         new_board = HexBoard(self.size)
         for row in range(self.size):
