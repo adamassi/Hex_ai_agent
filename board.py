@@ -1,4 +1,5 @@
 from union_find import union , find
+import copy
 
 """
 player 1 is represented by 1, player 2 by 2, and empty cells by 0.
@@ -133,9 +134,25 @@ class HexBoard:
 
         return False
 
-            
-
-        
+    def copy_board(self):
+        """
+        Returns a deep copy of the current HexBoard.
+        """
+        new_board = HexBoard(self.size)
+        for row in range(self.size):
+            for col in range(self.size):
+                current_cell = self.board[row][col]
+                copied_cell = new_board.board[row][col]
+                copied_cell.state = current_cell.state
+                copied_cell.touch_top = current_cell.touch_top
+                copied_cell.touch_bottom = current_cell.touch_bottom
+                copied_cell.touch_left = current_cell.touch_left
+                copied_cell.touch_right = current_cell.touch_right
+                copied_cell.rank = current_cell.rank
+                
+                # Deep copy the parent pointer
+                copied_cell.parent = new_board.board[current_cell.parent.row][current_cell.parent.col]
+        return new_board
 
     def display(self):
         """
