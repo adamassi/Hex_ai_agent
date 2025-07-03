@@ -25,6 +25,17 @@ class TestHexWinCheck(unittest.TestCase):
         print("test_player1_win_vertical")
         board.display()
 
+    def test_player1_win_vertical_2(self):
+        board = HexBoard(3)
+        board.make_move(0, 0, 1)
+        board.make_move(2, 0, 1)
+        if(board.check_win(1, 2, 0) is False):
+            print("should print")
+        board.check_win(1, 2, 0)
+        # Display the board
+        print("test_player1_win_vertical 2")
+        board.display()
+
     def test_player2_win_horizontal(self):
         board = HexBoard(3)
         board.make_move(0, 0, 2)
