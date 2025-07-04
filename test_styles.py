@@ -12,6 +12,7 @@ def test_styles():
     board.display()
 
     legal_moves = board.get_legal_moves()
+    # print("Legal moves:", legal_moves)
     current_player = 1
 
     for style in ["random", "center_bias", "aggressive", "defensive"]:
