@@ -56,6 +56,18 @@ class TestHexWinCheck(unittest.TestCase):
         # Display the board
         print("test_mixed_moves_no_win")
         board.display()
+    # def test_from_start(self):
+    #     board = HexBoard(3)
+    #     board.make_move(0, 0, 1)
+    #     board.make_move(1, 0, 2)
+    #     board.make_move(0, 1, 1)
+    #     board.make_move(0, 2, 1)
+
+    #     self.assertFalse(board.check_win(1, 2, 0))
+    #     self.assertFalse(board.check_win(2, 1, 0))
+    #     # Display the board
+    #     print("test_mixed_moves_no_win")
+    #     board.display()
 
 if __name__ == '__main__':
     unittest.main()
